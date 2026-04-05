@@ -1,0 +1,21 @@
+services:
+  server:
+    build:
+      context: ./server
+    ports:
+      - '8080:8080'
+    environment:
+      PORT: '8080'
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: http://localhost:8080
+        VITE_OLLAMA_VIA_PROXY: 'true'
+    ports:
+      - '8081:80'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    depends_on:
+      - server
